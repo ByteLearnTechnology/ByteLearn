@@ -1,0 +1,135 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-image: url(../../imagens/AcademiaTelainicial.webp);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}  
+
+.container__Quadrados{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 200px;
+}
+
+.circle{
+    background-color: rgb(144, 70, 187);
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 65px;
+    top: 38px;
+}
+
+.circle__img{
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.quadrado{
+      background-color:white;
+      width: 200px;
+      height: 200px;
+      border-top: 10px solid rgb(144, 70, 187);
+      border-radius: 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+}
+
+.quadrado__top{
+    height: 75px;
+    position: relative;
+}
+
+
+h1{
+    margin: 0 auto;
+    color: white; 
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 100px;
+    text-shadow: 10px 5px 5px rgb(144, 70, 187);
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+.manage__text{
+    margin-left: 115px;
+}
+
+h2{
+    font-family: Arial, Helvetica, sans-serif ;
+    text-align: center;
+    color: rgb(144, 70, 187);
+    margin: 20px 0 20px 0;
+}
+
+.btn{
+    text-align: center;
+}
+
+a{
+   all: unset;
+   background-color: rgb(144, 70, 187);
+   padding: 20px 20px;
+   font-size: 15px;
+   border: 10px black;
+   border-radius: 50px;
+   cursor: pointer;
+   font-family: Arial, Helvetica, sans-serif;
+   color:white  ;
+}
+
+@keyframes anima{
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(1.05);
+    }
+}
+
+button:hover{
+    animation-name: anima;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@media only screen and (max-width: 610px) {
+    body{
+        background-color: black;
+        padding-bottom: 30px;
+    }
+
+    h1{
+        font-size: 70px;
+    }
+
+    .manage__text{
+        margin-left: 80px;
+    }
+    .container__Quadrados{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+    }
+}
