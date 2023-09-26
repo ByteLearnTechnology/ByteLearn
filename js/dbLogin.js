@@ -1,6 +1,7 @@
 const usuarioTeste = {
   login: "teste",
-  senha: "teste"
+  senha: "teste",
+  conexao: false
 }
 
 const u = JSON.stringify(usuarioTeste);
