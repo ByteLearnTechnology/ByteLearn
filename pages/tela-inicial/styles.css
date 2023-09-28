@@ -105,7 +105,7 @@ a{
     }
 }
 
-button:hover{
+a:hover{
     animation-name: anima;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
@@ -120,11 +120,11 @@ button:hover{
     }
 
     h1{
-        font-size: 70px;
+        font-size: 50px;
     }
 
     .manage__text{
-        margin-left: 80px;
+        margin-left: 60px;
     }
     .container__Quadrados{
         flex-direction: column;
