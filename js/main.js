@@ -9,11 +9,9 @@ $('#logar').addEventListener('click', (ev) => {
     alert('Dados inválidos');
     return;
   }
-
   usuario.conexao = true;
   sessionStorage.setItem('db_usuario', JSON.stringify(usuario));
-
-  window.location.href = '../pages/tela-inicial';
+  window.location.assign('./pages/tela-inicial/index.html');
 });
 
 function validarDados(login, senha) {
