@@ -24,7 +24,7 @@
                 <th>Telefone</th>
                 <th>CPF</th>
                 <th>Email</th>
-                <!--ACRECENTAR UMA COLUNA QUE MOSTRE SE O PLANO DO ALUNO ESTÁ EM DIA OU ATRASADO-->
+                <th>Status</th>
                 <th class="acao">Editar</th>
                 <th class="acao">Excluir</th>
               </tr>
@@ -51,10 +51,18 @@
     
               <label for="m-email">Email</label>
               <input id="m-email" type="email" required />
+
+              <label for="m-status">Status</label>
+              <select name="status" id="m-status">
+                <option style="display: none;" selected disabled value="">Selecione o status</option>
+                <option value="Em dia">Em dia</option>
+                <option value="Atrasado">Atrasado</option>
+                <option value="Abandono">Abandono</option>
+              </select>
     
-              <button id="btnSalvar">Salvar</button>
-              <!---FAZER UM BOTAO DE CALCELAR PARA FECHAR A MINE TELA DE CADASTRO-->
-            </form>
+              <button type="button" id="btnSalvar">Salvar</button>
+            </form>            
+            <button class="btn-close-modal" type="button" onclick="closeModal()">X</button>
           </div>
         </div>
     

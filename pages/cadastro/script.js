@@ -6,9 +6,15 @@ const sTelefone = document.querySelector('#m-telefone')
 const sCPF = document.querySelector('#m-cpf')
 const sEmail = document.querySelector('#m-email')
 const btnSalvar = document.querySelector('#btnSalvar')
+const btnFechar = document.querySelector('.btn-close-modal')
+const sStatus = document.querySelector('#m-status')
 
 let itens
 let id
+
+function closeModal() {
+  modal.classList.remove('active')
+}
 
 function openModal(edit = false, index = 0) {
   modal.classList.add('active')
@@ -26,14 +32,15 @@ function openModal(edit = false, index = 0) {
     sCPF.value = itens[index].cpf
     sEmail.value = itens[index].email
     id = index
+    sStatus.value = itens[index].status
   } else {
     sNome.value = ''
     sPlano.value = ''
     sTelefone.value = ''
     sCPF.value = ''
     sEmail.value = ''
+    sStatus.value = ''
   }
-  
 }
 
 function editItem(index) {
@@ -56,6 +63,7 @@ function insertItem(item, index) {
     <td>${item.telefone}</td>
     <td>${item.cpf}</td>
     <td>${item.email}</td>
+    <td>${item.status}</td>
     <td class="acao">
       <button onclick="editItem(${index})"><i class='bx bx-edit' ></i></button>
     </td>
@@ -64,11 +72,18 @@ function insertItem(item, index) {
     </td>
   `
   tbody.appendChild(tr)
+  
 }
 
 btnSalvar.onclick = e => {
-  
-  if (sNome.value == '' || sPlano.value == '' || sTelefone.value == '' || sTelefone.value == '' || sCPF.value == '' || sEmail.value == '') {
+  if (
+    sNome.value == '' 
+  || sPlano.value == '' 
+  || sTelefone.value == '' 
+  || sTelefone.value == '' 
+  || sCPF.value == '' 
+  || sEmail.value == ''
+  || sStatus.value == '') {
     return
   }
 
@@ -80,8 +95,15 @@ btnSalvar.onclick = e => {
     itens[id].telefone = sTelefone.value
     itens[id].cpf = sCPF.value
     itens[id].email = sEmail.value
+    itens[id].status = sStatus.value
   } else {
-    itens.push({'nome': sNome.value, 'plano': sPlano.value, 'telefone': sTelefone.value, 'cpf': sCPF.value, 'email': sEmail.value})
+    itens.push({
+    'nome': sNome.value, 
+    'plano': sPlano.value, 
+    'telefone': sTelefone.value, 
+    'cpf': sCPF.value, 
+    'email': sEmail.value,
+    'status': sStatus.value})
   }
 
   setItensBD()
