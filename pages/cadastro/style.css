@@ -136,6 +136,14 @@ tbody tr td.acao {
     padding: 5px;
     font-size: 10px;
   }
+  @media (max-width: 490px) {
+    #searchInput{
+      width: 30%;
+      margin-left: 10%
+    }
+ 
+       
+  }
 
   thead tr th.acao {
     width: auto!important;
