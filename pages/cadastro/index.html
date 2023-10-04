@@ -11,8 +11,11 @@
     <div class="container">
         <div class="header">
           <span>Cadastro de Alunos</span>
-          <button onclick="openModal()" id="new">Incluir</i></button>
-          <!--FAZER UM BOTAO/CAMPO DE BUSCAR -->
+          <div class="header_btn">
+            <input type="text" id="searchInput" placeholder="Buscar..." />
+            <button onclick="searchData()" id="buscar"><img id="iconbusca" src="../../imagens/icons/pesquisa.png" alt=""></button>
+            <button onclick="openModal()" id="new">Incluir</i></button>
+         </div>
         </div>
     
         <div class="divTable">

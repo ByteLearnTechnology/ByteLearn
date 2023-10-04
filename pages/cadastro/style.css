@@ -33,6 +33,7 @@ button {
   align-items: center;
   justify-content: space-between;
   margin: auto 12px;
+  
 }
 
 .header span {
@@ -40,7 +41,10 @@ button {
   font-size: 20px;
   word-break: break-all;
 }
-
+.header_btn{
+  display: flex;
+  gap: 10px;
+}
 #new {
   font-size: 16px;
   padding: 8px;
@@ -49,6 +53,18 @@ button {
   color: white;
   background-color:  rgb(144, 70, 187);
 }
+  #buscar{
+    font-size: 16px;
+    padding: 6.5px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    background-color:  rgb(144, 70, 187);
+  }
+  #iconbusca{
+    height: 20px;
+    width: 20px;
+  }
 
 .divTable {
   padding: 10px;

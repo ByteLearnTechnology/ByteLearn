@@ -121,6 +121,29 @@ function loadItens() {
   })
 
 }
+function searchData() {
+  // Pega o valor do campo de busca
+  var searchText = document.getElementById("searchInput").value.toLowerCase();
+
+  // Pega a tabela dentro da div
+  var table = document.querySelector(".divTable table");
+
+  // Pega todas as linhas (tr) da tabela
+  var rows = table.querySelectorAll("tbody tr");
+
+  // Itera pelas linhas da tabela
+  for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var rowData = row.textContent.toLowerCase();
+
+      // Verifica se a linha contém o texto de busca
+      if (rowData.includes(searchText)) {
+          row.style.display = "";
+      } else {
+          row.style.display = "none"; // Esconde a linha se não contém o texto de busca
+      }
+  }
+}
 
 const getItensBD = () => JSON.parse(localStorage.getItem('dbfunc')) ?? []
 const setItensBD = () => localStorage.setItem('dbfunc', JSON.stringify(itens))
