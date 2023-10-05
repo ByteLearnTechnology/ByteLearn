@@ -53,6 +53,7 @@ button {
   color: white;
   background-color:  rgb(144, 70, 187);
 }
+
   #buscar{
     font-size: 16px;
     padding: 8px 16px;
@@ -137,6 +138,16 @@ tbody tr td.acao {
 
 #l-telefone{
   display: block;
+}
+
+#voltar{
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  background-color:  rgb(144, 70, 187);
+  margin-right: 16px;
 }
 
 @media (max-width: 700px) {

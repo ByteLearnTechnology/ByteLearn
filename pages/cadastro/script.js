@@ -12,6 +12,10 @@ const sStatus = document.querySelector('#m-status')
 let itens
 let id
 
+function voltar() {
+  window.history.back();
+}
+
 function closeModal() {
   modal.classList.remove('active')
 }
