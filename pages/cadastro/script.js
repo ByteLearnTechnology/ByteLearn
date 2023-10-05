@@ -31,18 +31,18 @@ function openModal(edit = false, index = 0) {
 
   if (edit) {
     sNome.value = itens[index].nome
-    sPlano.value = itens[index].plano
     sTelefone.value = itens[index].telefone
     sCPF.value = itens[index].cpf
     sEmail.value = itens[index].email
     id = index
+    sPlano.value = itens[index].plano
     sStatus.value = itens[index].status
   } else {
     sNome.value = ''
-    sPlano.value = ''
     sTelefone.value = ''
     sCPF.value = ''
     sEmail.value = ''
+    sPlano.value = ''
     sStatus.value = ''
   }
 }
@@ -63,10 +63,10 @@ function insertItem(item, index) {
 
   tr.innerHTML = `
     <td>${item.nome}</td>
-    <td>${item.plano}</td>
     <td>${item.telefone}</td>
     <td>${item.cpf}</td>
     <td>${item.email}</td>
+    <td>${item.plano}</td>
     <td>${item.status}</td>
     <td class="acao">
       <button onclick="editItem(${index})"><i class='bx bx-edit' ></i></button>
@@ -82,11 +82,11 @@ function insertItem(item, index) {
 btnSalvar.onclick = e => {
   if (
     sNome.value == '' 
-  || sPlano.value == '' 
   || sTelefone.value == '' 
   || sTelefone.value == '' 
   || sCPF.value == '' 
   || sEmail.value == ''
+  || sPlano.value == '' 
   || sStatus.value == '') {
     return
   }
@@ -95,18 +95,18 @@ btnSalvar.onclick = e => {
 
   if (id !== undefined) {
     itens[id].nome = sNome.value
-    itens[id].plano = sPlano.value
     itens[id].telefone = sTelefone.value
     itens[id].cpf = sCPF.value
     itens[id].email = sEmail.value
+    itens[id].plano = sPlano.value
     itens[id].status = sStatus.value
   } else {
     itens.push({
     'nome': sNome.value, 
-    'plano': sPlano.value, 
     'telefone': sTelefone.value, 
     'cpf': sCPF.value, 
     'email': sEmail.value,
+    'plano': sPlano.value, 
     'status': sStatus.value})
   }
 
