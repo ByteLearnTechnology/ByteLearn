@@ -25,6 +25,7 @@ button {
   height: 80%;
   border-radius: 10px;
   background: white;
+  padding: 0 24px;
 }
 
 .header {
@@ -32,8 +33,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: auto 12px;
-  
+  margin: auto 12px;  
 }
 
 .header span {
@@ -47,7 +47,7 @@ button {
 }
 #new {
   font-size: 16px;
-  padding: 8px;
+  padding: 8px 16px;
   border-radius: 5px;
   border: none;
   color: white;
@@ -55,12 +55,20 @@ button {
 }
   #buscar{
     font-size: 16px;
-    padding: 6.5px;
+    padding: 8px 16px;
     border-radius: 5px;
     border: none;
     color: white;
     background-color:  rgb(144, 70, 187);
+    display: flex;
+    align-items: center;
   }
+
+#searchInput{
+  outline: none;
+  padding-left: 8px;
+}
+
   #iconbusca{
     height: 20px;
     width: 20px;
@@ -123,6 +131,14 @@ tbody tr td.acao {
   text-align: center;
 }
 
+#m-plano{
+  margin-bottom: 20px;
+}
+
+#l-telefone{
+  display: block;
+}
+
 @media (max-width: 700px) {
   body {
     font-size: 10px;
@@ -133,9 +149,10 @@ tbody tr td.acao {
   }
 
   #new {
-    padding: 5px;
+    padding: 5px 10px;
     font-size: 10px;
   }
+
   @media (max-width: 490px) {
     #searchInput{
       width: 30%;
