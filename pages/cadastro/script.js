@@ -117,8 +117,28 @@ btnSalvar.onclick = e => {
   id = undefined
 }
 
-function loadItens() {
+function ordenar(ascendente, coluna) {
+  if (coluna == 'nome') {
+    itens.sort((a, b) => (a.nome > b.nome) ? ascendente.a : ((b.nome > a.nome) ? ascendente.b : 0));
+  } else if (coluna == 'telefone') {
+    itens.sort((a, b) => (a.telefone > b.telefone) ? ascendente.a : ((b.telefone > a.telefone) ? ascendente.b : 0));
+  } else if (coluna == 'cpf') {    
+    itens.sort((a, b) => (a.cpf > b.cpf) ? ascendente.a : ((b.cpf > a.cpf) ? ascendente.b : 0));
+  } else if (coluna == 'email') {
+    itens.sort((a, b) => (a.email > b.email) ? ascendente.a : ((b.email > a.email) ? ascendente.b : 0));
+  } else if (coluna == 'plano') {
+    itens.sort((a, b) => (a.plano > b.plano) ? ascendente.a : ((b.plano > a.plano) ? ascendente.b : 0));
+  }
+  else if (coluna == 'status') {itens.sort((a, b) => (a.status > b.status) ? ascendente.a : ((b.status > a.status) ? ascendente.b : 0));
+  }
+}
+let ordem = {a: -1, b: 1}
+
+function loadItens(tituloColuna) {
+  const setOrdem = ordem.a === -1 && ordem.b === 1 ? ordem = {a: 1, b: -1} : ordem = {a: -1, b: 1}
   itens = getItensBD()
+  ordenar(ordem, tituloColuna)
+
   tbody.innerHTML = ''
   itens.forEach((item, index) => {
     insertItem(item, index)
