@@ -26,6 +26,7 @@ button {
   border-radius: 10px;
   background: white;
   padding: 0 24px;
+  position: relative;
 }
 
 .header {
@@ -36,10 +37,9 @@ button {
   margin: auto 12px;  
 }
 
-.header span {
+.header p {
   font-weight: 900;
   font-size: 20px;
-  word-break: break-all;
 }
 .header_btn{
   display: flex;
@@ -95,7 +95,6 @@ button {
 table {
   width: 100%;
   border-spacing: 10px;
-  word-break: break-all;
   border-collapse: collapse;
 }
 
@@ -103,8 +102,8 @@ thead {
   background-color: whitesmoke;
 }
 
-tr {
-  border-bottom: 1px solid rgb(238, 235, 235)!important;
+tbody > tr {
+  border-bottom: 1px solid rgb(238, 235, 235);
 }
 
 tbody tr td {
@@ -124,7 +123,15 @@ thead tr th:hover {
   background-color: rgb(238, 235, 235);
 }
 
-tbody tr {
+thead tr > th:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+thead tr > th:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+tbody tr { 
   margin-bottom: 50px;
 }
 
@@ -146,12 +153,11 @@ tbody tr td.acao {
 }
 
 #voltar{
-  margin-left: -88%;
-  position: absolute;
   background-color: transparent;
-  border: none;
-  margin-top: -43%;
- 
+  border: none; 
+  position: absolute;
+  top: -40px;
+  left: 0px;
 }
 
 
@@ -160,8 +166,8 @@ tbody tr td.acao {
     font-size: 10px;
   }
   
-  .header span {
-    font-size: 15px;
+  .header p {
+    font-size: 14px;
   }
 
   #new {
