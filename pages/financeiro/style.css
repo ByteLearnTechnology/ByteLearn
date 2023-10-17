@@ -1,0 +1,309 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;700&family=Roboto:wght@100;300;400;500;700;900&family=Source+Sans+Pro:wght@200;300;400;600;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.1);
+}
+
+button {
+  cursor: pointer;
+}
+
+.container {
+  width: 90%;
+  height: 80%;
+  border-radius: 10px;
+  background: white;
+  padding: 0 24px;
+  position: relative;
+}
+
+.header {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: auto 12px;  
+}
+
+.header p {
+  font-weight: 900;
+  font-size: 20px;
+}
+.header_btn{
+  display: flex;
+  gap: 10px;
+}
+#new {
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  background-color:  rgb(144, 70, 187);
+}
+
+  #buscar{
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    background-color:  rgb(144, 70, 187);
+    display: flex;
+    align-items: center;
+  }
+
+#searchInput{
+  outline: none;
+  padding-left: 8px;
+}
+
+  #iconbusca{
+    height: 20px;
+    width: 20px;
+  }
+
+.divTable {
+  padding: 10px;
+  width: auto; 
+  height:inherit; 
+  overflow:auto;
+}
+
+.divTable::-webkit-scrollbar {
+  width: 12px;
+  background-color: whitesmoke; 
+}
+
+.divTable::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: darkgray; 
+}
+
+table {
+  width: 100%;
+  border-spacing: 10px;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: whitesmoke;
+}
+
+tbody > tr {
+  border-bottom: 1px solid rgb(238, 235, 235);
+}
+
+tbody tr td {
+  vertical-align: text-top;
+  padding: 6px;
+  max-width: 50px;
+}
+
+thead tr th {
+  padding: 5px;
+  text-align: start;
+  margin-bottom: 50px;
+  cursor: pointer;
+}
+
+thead tr th:hover {
+  background-color: rgb(238, 235, 235);
+}
+
+thead tr > th:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+thead tr > th:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+tbody tr { 
+  margin-bottom: 50px;
+}
+
+thead tr th.acao {
+  width: 100px!important;
+  text-align: center;
+}
+
+tbody tr td.acao {
+  text-align: center;
+}
+
+#m-plano{
+  margin-bottom: 20px;
+}
+
+#l-telefone{
+  display: block;
+}
+
+#voltar{
+  background-color: transparent;
+  border: none; 
+  position: absolute;
+  top: -40px;
+  left: 0px;
+}
+
+
+@media (max-width: 700px) {
+  body {
+    font-size: 10px;
+  }
+  
+  .header p {
+    font-size: 14px;
+  }
+
+  #new {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+
+  @media (max-width: 490px) {
+    #searchInput{
+      width: 30%;
+      margin-left: 10%
+    }
+   
+  }
+
+  thead tr th.acao {
+    width: auto!important;
+  }
+  
+  td button i {
+    font-size: 20px!important;
+  }
+
+  td button i:first-child {
+    margin-right: 0;
+  }
+
+  .modal {
+    width: 90%!important;
+  }
+
+  .modal label {
+    font-size: 12px!important;
+  }
+}
+
+.modal-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  padding: 40px;
+  background-color: white;
+  border-radius: 10px;
+  width: 50%;
+  position: relative;
+}
+
+.modal label {
+  font-size: 14px;
+  width: 100%;
+}
+
+.modal input {
+  width: 100%;
+  outline: none;
+  padding: 5px 10px; 
+  width: 100%;
+  margin-bottom: 20px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+#btnSalvar {
+  width: 100%;
+  margin: 10px auto;
+  outline: none;
+  border-radius: 20px; 
+  padding: 5px 10px; 
+  width: 100%;
+  border: none;
+  background-color:  rgb(144, 70, 187);;
+  color: white;
+}
+
+.active {
+  display: flex;
+}
+
+.active .modal {
+  animation: modal .4s;
+}
+
+.btn-close-modal{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: red ;
+  color: white;
+  border: none;
+  border-radius: 0 10px 0 0;
+  font-size: 1.25rem;
+  width: 40px;
+}
+
+.btn-close-modal:hover{
+  background: rgb(252, 65, 65);
+}
+
+#m-status{
+  margin-bottom: 20px;
+}
+
+@keyframes modal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -60px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+td button {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+td button i {
+  font-size: 25px;
+}
+
+td button i:first-child {
+  margin-right: 10px;
+}
