@@ -109,7 +109,6 @@ tbody > tr {
 tbody tr td {
   vertical-align: text-top;
   padding: 6px;
-  max-width: 50px;
 }
 
 thead tr th {
@@ -117,6 +116,7 @@ thead tr th {
   text-align: start;
   margin-bottom: 50px;
   cursor: pointer;
+  
 }
 
 thead tr th:hover {

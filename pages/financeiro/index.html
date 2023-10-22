@@ -24,10 +24,8 @@
             <thead>
               <tr>
                 <th onclick="loadItens('nome')">Nome</th>
-                <th onclick="loadItens('plano')">Mês</th>
+                <th onclick="loadItens('Data')">Data de pagamento</th>
                 <th onclick="loadItens('status')">Status</th>
-                <th class="acao">Editar</th>
-                <th class="acao">Excluir</th>
               </tr>
             </thead>
             <tbody>
@@ -41,8 +39,8 @@
               <label for="m-nome">Nome</label>
               <input id="m-nome" type="text" required />
     
-              <label id="l-mes" for="m-mes">Mês</label>
-              <input id="m-mes" type="month" required />
+              <label id="l-data" for="m-data">Mês</label>
+              <input id="m-data" type="date" required />
     
               <label for="m-status">Status</label>
               <select name="status" id="m-status">
