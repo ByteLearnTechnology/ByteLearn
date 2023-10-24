@@ -1,4 +1,5 @@
 const itensBD = JSON.parse(localStorage.getItem('dbfunc')) ?? []
+const setItensBD = () => localStorage.setItem('dbfunc', JSON.stringify(itens))
 
 const modal = document.querySelector('.modal-container')
 const tbody = document.querySelector('tbody')
@@ -9,25 +10,21 @@ const btnFechar = document.querySelector('.btn-close-modal')
 const sStatus = document.querySelector('#m-status')
 
 let itens
+let copyItens
 let id
 
 
 let ordem = { a: -1, b: 1 }
 
 function ordenar(ascendente, coluna) {
-  if (coluna == 'nome') {
-    itens.sort((a, b) => (a.nome > b.nome) ? ascendente.a : ((b.nome > a.nome) ? ascendente.b : 0));
-  } else if (coluna == 'status') {
-    itens.sort((a, b) => (a.status > b.status) ? ascendente.a : ((b.status > a.status) ? ascendente.b : 0));
-  } else {
-    itens.sort((a, b) => (a.data > b.data) ? ascendente.a : ((b.data > a.data) ? ascendente.b : 0));
-  }
+  itens.sort((a, b) => (a[coluna] > b[coluna]) ? ascendente.a : ((b[coluna] > a[coluna]) ? ascendente.b : 0));
 }
 
 function loadItens(tituloColuna) {
   const setOrdem = ordem.a === -1 && ordem.b === 1 ? ordem = { a: 1, b: -1 } : ordem = { a: -1, b: 1 }
   itens = itensBD
-  itens = itens.map(item => {item.data = item.data.split('-').reverse().join('/'); return item})
+  copyItens = itensBD
+  copyItens.map(item => {item.data = item.data.split('-').reverse().join('/'); return item})
   ordenar(ordem, tituloColuna)
 
   tbody.innerHTML = ''

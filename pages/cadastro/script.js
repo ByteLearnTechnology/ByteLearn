@@ -11,6 +11,7 @@ const sStatus = document.querySelector('#m-status')
 const sData = document.querySelector('#m-data')
 
 let itens
+let copyItens
 let id
 
 function voltar() {
@@ -34,11 +35,11 @@ function openModal(edit = false, index = 0) {
     sNome.value = itens[index].nome
     sTelefone.value = itens[index].telefone
     sCPF.value = itens[index].cpf
+    sData.value = itens[index].data
     sEmail.value = itens[index].email
     id = index
     sPlano.value = itens[index].plano
     sStatus.value = itens[index].status
-    sData.value = itens[index].data
   } else {
     sNome.value = ''
     sTelefone.value = ''
@@ -88,6 +89,7 @@ btnSalvar.onclick = e => {
     || sTelefone.value == ''
     || sTelefone.value == ''
     || sCPF.value == ''
+    || sData.value == ''
     || sEmail.value == ''
     || sPlano.value == ''
     || sStatus.value == '') {
@@ -95,7 +97,6 @@ btnSalvar.onclick = e => {
   }
 
   e.preventDefault();
-
   if (id !== undefined) {
     itens[id].nome = sNome.value
     itens[id].telefone = sTelefone.value
@@ -103,7 +104,7 @@ btnSalvar.onclick = e => {
     itens[id].email = sEmail.value
     itens[id].plano = sPlano.value
     itens[id].status = sStatus.value
-    itens[id].data = sData.value.value
+    itens[id].data = sData.value
   } else {
     itens.push({
       'nome': sNome.value,
@@ -124,23 +125,7 @@ btnSalvar.onclick = e => {
 }
 
 function ordenar(ascendente, coluna) {
-  if (coluna == 'nome') {
-    itens.sort((a, b) => (a.nome > b.nome) ? ascendente.a : ((b.nome > a.nome) ? ascendente.b : 0));
-  } else if (coluna == 'telefone') {
-    itens.sort((a, b) => (a.telefone > b.telefone) ? ascendente.a : ((b.telefone > a.telefone) ? ascendente.b : 0));
-  } else if (coluna == 'cpf') {
-    itens.sort((a, b) => (a.cpf > b.cpf) ? ascendente.a : ((b.cpf > a.cpf) ? ascendente.b : 0));
-  } else if (coluna == 'email') {
-    itens.sort((a, b) => (a.email > b.email) ? ascendente.a : ((b.email > a.email) ? ascendente.b : 0));
-  } else if (coluna == 'plano') {
-    itens.sort((a, b) => (a.plano > b.plano) ? ascendente.a : ((b.plano > a.plano) ? ascendente.b : 0));
-  }
-  else if (coluna == 'status') {
-    itens.sort((a, b) => (a.status > b.status) ? ascendente.a : ((b.status > a.status) ? ascendente.b : 0));
-  }
-  else { 
-    itens.sort((a, b) => (a.data > b.data) ? ascendente.a : ((b.data > a.data) ? ascendente.b : 0));
-  }
+    copyItens.sort((a, b) => (a[coluna] > b[coluna]) ? ascendente.a : ((b[coluna] > a[coluna]) ? ascendente.b : 0));
 }
 
 let ordem = { a: -1, b: 1 }
@@ -148,11 +133,13 @@ let ordem = { a: -1, b: 1 }
 function loadItens(tituloColuna) {
   const setOrdem = ordem.a === -1 && ordem.b === 1 ? ordem = { a: 1, b: -1 } : ordem = { a: -1, b: 1 }
   itens = getItensBD()
-  itens = itens.map(item => {item.data = item.data.split('-').reverse().join('/'); return item})
+  copyItens  =  getItensBD()
+
+  copyItens.map(item => {item.data = item.data.split('-').reverse().join('/'); return item})
   ordenar(ordem, tituloColuna)
 
   tbody.innerHTML = ''
-  itens.forEach((item, index) => {
+  copyItens.forEach((item, index) => {
     insertItem(item, index)
   })
 
