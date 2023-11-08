@@ -18,7 +18,7 @@ let id
 let ordem = { a: -1, b: 1 }
 
 function ordenar(ascendente, coluna) {
-  itens.sort((a, b) => (a[coluna] > b[coluna]) ? ascendente.a : ((b[coluna] > a[coluna]) ? ascendente.b : 0));
+  copyItens.sort((a, b) => (a[coluna] > b[coluna]) ? ascendente.a : ((b[coluna] > a[coluna]) ? ascendente.b : 0));
 }
 
 function loadItens(tituloColuna) {
