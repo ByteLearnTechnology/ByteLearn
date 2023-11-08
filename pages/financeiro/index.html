@@ -25,7 +25,8 @@
               <tr>
                 <th onclick="loadItens('nome')">Nome</th>
                 <th onclick="loadItens('data')">Data de pagamento</th>
-                <th onclick="loadItens('status')">Status</th>
+                <th onclick="loadItens('status')">Status</th>                
+                <th class="acao">Editar</th>
               </tr>
             </thead>
             <tbody>
@@ -57,6 +58,31 @@
         </div>
     
       </div>
+
+      <div class="modal-container">
+        <div class="modal">
+          <form>
+            <label for="m-nome">Nome</label>
+            <input id="m-nome" type="text" required />
+
+  
+            <label for="m-data">Data de pagamento</label>
+            <input id="m-data" type="date" required />
+   
+            <label for="m-status">Status</label>
+            <select name="status" id="m-status">
+              <option style="display: none;" selected disabled value="">Selecione o status</option>
+              <option value="Em dia">Em dia</option>
+              <option value="Atrasado">Atrasado</option>
+              <option value="Abandono">Abandono</option>
+            </select>
+  
+            <button type="button" id="btnSalvar">Salvar</button>
+          </form>
+          <button class="btn-close-modal" type="button" onclick="closeModal()">X</button>
+        </div>
+      </div>
+
       <script src="script.js"></script>
 </body>
 </html>
