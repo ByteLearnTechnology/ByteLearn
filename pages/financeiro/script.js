@@ -29,7 +29,7 @@ function loadItens(tituloColuna) {
   ordenar(ordem, tituloColuna)
 
   tbody.innerHTML = ''
-  itens.forEach((item, index) => {
+  copyItens.forEach((item, index) => {
     insertItem(item, index)
   })
 
