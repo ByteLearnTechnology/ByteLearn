@@ -16,22 +16,6 @@ const $ = (elemento) => document.querySelector(elemento);
 $('#logar').addEventListener('click', (ev) => {
   ev.preventDefault();
   logar(true)
-  // window.location.assign('./pages/tela-inicial/index.html')
-  return
-  // Recupera os dados do usuário da sessão.
-  const usuario = JSON.parse(sessionStorage.getItem('db_usuario'));
-
-  // Verifica se há um usuário na sessão e valida os dados de login.
-  if (!usuario || !validarDados(usuario.login, usuario.senha)) {
-    alert('Dados inválidos');
-    return;
-  }
-
-  // Define a propriedade 'conexao' como true e atualiza os dados do usuário na sessão.
-  usuario.conexao = true;
-  sessionStorage.setItem('db_usuario', JSON.stringify(usuario));
-
-  // Redireciona para a página inicial.
 });
 
 /**
@@ -73,7 +57,7 @@ async function logar(loginPage) {
   if (loginPage) {
     window.location.assign('./pages/tela-inicial/index.html');
   }
-  
+
     return data;
   } catch (error) {
     console.error('Erro na solicitação:', error);

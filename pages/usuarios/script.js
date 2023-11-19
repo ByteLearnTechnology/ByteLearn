@@ -15,7 +15,8 @@ let copyItens
 let id
 loadStatus()
 loadPlanos()
-
+loadStudantsBD()
+const getItensBack = () => JSON.parse(localStorage.getItem('dbBackend')) ?? []
 
 function voltar() {
   window.history.back();
@@ -35,14 +36,14 @@ function openModal(edit = false, index = 0) {
   }
 
   if (edit) {
-    sNome.value = itens[index].nome
-    sTelefone.value = itens[index].telefone
+    sNome.value = itens[index].name
+    sTelefone.value = itens[index].phone
     sCPF.value = itens[index].cpf
-    sData.value = itens[index].data
+    sData.value = formatData(itens[index].finance.payday, '-')
     sEmail.value = itens[index].email
     id = index
-    sPlano.value = itens[index].plano
-    sStatus.value = itens[index].status
+    sPlano.value = itens[index].plan.id
+    sStatus.value = itens[index].status.id
   } else {
     sNome.value = ''
     sTelefone.value = ''
@@ -68,13 +69,13 @@ function deleteItem(index) {
 function insertItem(item, index) {
   let tr = document.createElement('tr')
   tr.innerHTML = `
-    <td>${item.nome}</td>
-    <td>${item.telefone}</td>
+    <td>${item.name}</td>
+    <td>${item.phone}</td>
     <td>${item.cpf}</td>
-    <td>${item.data}</td>
+    <td>${item.finance.payday}</td>
     <td>${item.email}</td>
-    <td>${item.plano}</td>
-    <td>${item.status}</td>
+    <td>${item.plan.description}</td>
+    <td>${item.status.description}</td>
     <td class="acao">
       <button onclick="editItem(${index})"><i class='bx bx-edit' ></i></button>
     </td>
@@ -135,17 +136,30 @@ let ordem = { a: -1, b: 1 }
 
 function loadItens(tituloColuna) {
   const setOrdem = ordem.a === -1 && ordem.b === 1 ? ordem = { a: 1, b: -1 } : ordem = { a: -1, b: 1 }
-  itens = getItensBD()
-  copyItens = getItensBD()
+  itens = getItensBack()
+  copyItens = getItensBack()
 
-  copyItens.map(item => { item.data = item.data.split('-').reverse().join('/'); return item })
+  copyItens.map(item => { item.finance.payday = formatData(item.finance.payday, '/'); return item })
   ordenar(ordem, tituloColuna)
-
+  console.log(copyItens);
   tbody.innerHTML = ''
   copyItens.forEach((item, index) => {
     insertItem(item, index)
   })
 
+}
+
+function formatData(dateString, separator) {
+  const parsedDate = new Date(dateString);
+
+  if (isNaN(parsedDate.getTime())) {
+    console.error('Erro: Data inválida.');
+    return null;
+  }
+
+  let formattedDateString = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parsedDate);
+  formattedDateString = separator === '/' ? formattedDateString : formattedDateString.split('/').reverse().join('-')
+  return formattedDateString
 }
 
 
@@ -176,7 +190,20 @@ function searchData() {
 const getItensBD = () => JSON.parse(localStorage.getItem('dbfunc')) ?? []
 const setItensBD = () => localStorage.setItem('dbfunc', JSON.stringify(itens))
 
-loadItens()
+async function loadStudantsBD() {
+  await fetch('https://back-gymapi.onrender.com/api/enrolled', {
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'application/json'
+    },
+  }).then(data => data.json())
+    .then(
+      data => {
+        localStorage.setItem('dbBackend', JSON.stringify(data))
+      }
+    )
+  loadItens()
+}
 
 async function loadStatus() {
   const response = await fetch('https://back-gymapi.onrender.com/api/status', {
@@ -188,7 +215,7 @@ async function loadStatus() {
 
   sStatus.innerHTML = `
 <option style="display: none;" selected disabled value="">Selecione o status</option>
-${response.map(data => `<option value="${data.description}">${data.description}</option>`)}
+${response.map(data => `<option value="${data.id}">${data.description}</option>`)}
 `
 }
 
@@ -202,6 +229,6 @@ async function loadPlanos() {
 
   sPlano.innerHTML = `
   <option style="display: none;" selected disabled value="">Selecione um plano</option>
-${response.map(data => `<option value="${data.description}">${data.description}</option>`)}
+${response.map(data => `<option value="${data.id}">${data.description}</option>`)}
 `
 }

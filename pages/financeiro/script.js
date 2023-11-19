@@ -16,6 +16,9 @@ let id
 
 loadStatus()
 loadPlanos()
+loadStudantsBD()
+const getItensBack = () => JSON.parse(localStorage.getItem('dbBackend')) ?? []
+
 let ordem = { a: -1, b: 1 }
 
 function ordenar(ascendente, coluna) {
@@ -24,9 +27,9 @@ function ordenar(ascendente, coluna) {
 
 function loadItens(tituloColuna) {
   const setOrdem = ordem.a === -1 && ordem.b === 1 ? ordem = { a: 1, b: -1 } : ordem = { a: -1, b: 1 }
-  itens = getItensBD()
-  copyItens = getItensBD()
-  copyItens.map(item => {item.data = item.data.split('-').reverse().join('/'); return item})
+  itens = getItensBack()
+  copyItens = getItensBack()
+  copyItens.map(item => { item.finance.payday = formatData(item.finance.payday, '/'); return item })
   ordenar(ordem, tituloColuna)
 
   tbody.innerHTML = ''
@@ -54,10 +57,10 @@ function openModal(edit = false, index = 0) {
   }
 
   if (edit) {
-    sNome.value = itens[index].nome
     id = index
-    sData.value = itens[index].data
-    sStatus.value = itens[index].status
+    sNome.value = itens[index].name
+    sData.value = formatData(itens[index].finance.payday, '-')
+    sStatus.value = itens[index].status.id
   } else {
     sNome.value = ''
     sData.value = ''
@@ -77,10 +80,10 @@ function deleteItem(index) {
 function insertItem(item, index) {
   let tr = document.createElement('tr')
 
-  tr.innerHTML = `
-    <td>${item.nome}</td>
-    <td>${item.data}</td>
-    <td>${item.status}</td>    
+  tr.innerHTML = `    
+    <td>${item.name}</td>
+    <td>${item.finance.payday}</td>
+    <td>${item.status.description}</td>
     <td class="acao">
       <button onclick="editItem(${index})"><i class='bx bx-edit' ></i></button>
     </td>
@@ -141,8 +144,33 @@ function searchData() {
   }
 }
 
-loadItens()
+function formatData(dateString, separator) {
+  const parsedDate = new Date(dateString);
 
+  if (isNaN(parsedDate.getTime())) {
+    console.error('Erro: Data inválida.');
+    return null;
+  }
+
+  let formattedDateString = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parsedDate);
+  formattedDateString = separator === '/' ? formattedDateString : formattedDateString.split('/').reverse().join('-')
+  return formattedDateString
+}
+
+async function loadStudantsBD() {
+  await fetch('https://back-gymapi.onrender.com/api/enrolled', {
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'application/json'
+    },
+  }).then(data => data.json())
+    .then(
+      data => {
+        localStorage.setItem('dbBackend', JSON.stringify(data))
+      }
+    )
+  loadItens()
+}
 
 async function loadStatus() {
   const response = await fetch('https://back-gymapi.onrender.com/api/status', {
@@ -154,7 +182,7 @@ async function loadStatus() {
 
   sStatus.innerHTML = `
 <option style="display: none;" selected disabled value="">Selecione o status</option>
-${response.map(data => `<option value="${data.description}">${data.description}</option>`)}
+${response.map(data => `<option value="${data.id}">${data.description}</option>`)}
 `
 }
 
@@ -168,6 +196,6 @@ async function loadPlanos() {
 
   sPlano.innerHTML = `
   <option style="display: none;" selected disabled value="">Selecione um plano</option>
-${response.map(data => `<option value="${data.description}">${data.description}</option>`)}
+${response.map(data => `<option value="${data.id}">${data.description}</option>`)}
 `
 }
