@@ -14,7 +14,8 @@ let itens
 let copyItens
 let id
 
-
+loadStatus()
+loadPlanos()
 let ordem = { a: -1, b: 1 }
 
 function ordenar(ascendente, coluna) {
@@ -141,3 +142,32 @@ function searchData() {
 }
 
 loadItens()
+
+
+async function loadStatus() {
+  const response = await fetch('https://back-gymapi.onrender.com/api/status', {
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'application/json'
+    },
+  }).then(data => data.json())
+
+  sStatus.innerHTML = `
+<option style="display: none;" selected disabled value="">Selecione o status</option>
+${response.map(data => `<option value="${data.description}">${data.description}</option>`)}
+`
+}
+
+async function loadPlanos() {
+  const response = await fetch('https://back-gymapi.onrender.com/api/plan', {
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'application/json'
+    },
+  }).then(data => data.json())
+
+  sPlano.innerHTML = `
+  <option style="display: none;" selected disabled value="">Selecione um plano</option>
+${response.map(data => `<option value="${data.description}">${data.description}</option>`)}
+`
+}

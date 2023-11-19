@@ -13,6 +13,9 @@ const sData = document.querySelector('#m-data')
 let itens
 let copyItens
 let id
+loadStatus()
+loadPlanos()
+
 
 function voltar() {
   window.history.back();
@@ -125,7 +128,7 @@ btnSalvar.onclick = e => {
 }
 
 function ordenar(ascendente, coluna) {
-    copyItens.sort((a, b) => (a[coluna] > b[coluna]) ? ascendente.a : ((b[coluna] > a[coluna]) ? ascendente.b : 0));
+  copyItens.sort((a, b) => (a[coluna] > b[coluna]) ? ascendente.a : ((b[coluna] > a[coluna]) ? ascendente.b : 0));
 }
 
 let ordem = { a: -1, b: 1 }
@@ -133,9 +136,9 @@ let ordem = { a: -1, b: 1 }
 function loadItens(tituloColuna) {
   const setOrdem = ordem.a === -1 && ordem.b === 1 ? ordem = { a: 1, b: -1 } : ordem = { a: -1, b: 1 }
   itens = getItensBD()
-  copyItens  =  getItensBD()
+  copyItens = getItensBD()
 
-  copyItens.map(item => {item.data = item.data.split('-').reverse().join('/'); return item})
+  copyItens.map(item => { item.data = item.data.split('-').reverse().join('/'); return item })
   ordenar(ordem, tituloColuna)
 
   tbody.innerHTML = ''
@@ -174,3 +177,31 @@ const getItensBD = () => JSON.parse(localStorage.getItem('dbfunc')) ?? []
 const setItensBD = () => localStorage.setItem('dbfunc', JSON.stringify(itens))
 
 loadItens()
+
+async function loadStatus() {
+  const response = await fetch('https://back-gymapi.onrender.com/api/status', {
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'application/json'
+    },
+  }).then(data => data.json())
+
+  sStatus.innerHTML = `
+<option style="display: none;" selected disabled value="">Selecione o status</option>
+${response.map(data => `<option value="${data.description}">${data.description}</option>`)}
+`
+}
+
+async function loadPlanos() {
+  const response = await fetch('https://back-gymapi.onrender.com/api/plan', {
+    headers: {
+      'Accept': '*/*',
+      'Content-Type': 'application/json'
+    },
+  }).then(data => data.json())
+
+  sPlano.innerHTML = `
+  <option style="display: none;" selected disabled value="">Selecione um plano</option>
+${response.map(data => `<option value="${data.description}">${data.description}</option>`)}
+`
+}
