@@ -15,8 +15,10 @@ const $ = (elemento) => document.querySelector(elemento);
  */
 $('#logar').addEventListener('click', (ev) => {
   ev.preventDefault();
-
-   // Recupera os dados do usuário da sessão.
+  logar(true)
+  // window.location.assign('./pages/tela-inicial/index.html')
+  return
+  // Recupera os dados do usuário da sessão.
   const usuario = JSON.parse(sessionStorage.getItem('db_usuario'));
 
   // Verifica se há um usuário na sessão e valida os dados de login.
@@ -30,7 +32,6 @@ $('#logar').addEventListener('click', (ev) => {
   sessionStorage.setItem('db_usuario', JSON.stringify(usuario));
 
   // Redireciona para a página inicial.
-  window.location.assign('./pages/tela-inicial/index.html');
 });
 
 /**
@@ -43,3 +44,39 @@ $('#logar').addEventListener('click', (ev) => {
 function validarDados(login, senha) {
   return login === $('#usuario').value && senha === $('#senha').value;
 };
+
+
+async function logar(loginPage) {
+  const inputItems = JSON.stringify({
+    login: $('#usuario').value,
+    password: $('#senha').value
+  });
+
+  try {
+    const response = await fetch('https://back-gymapi.onrender.com/api/user/login', {
+      method: 'POST',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      },
+      body: inputItems,
+    });
+
+    if (!response.ok) {
+      const customError = await response.json()
+      throw new Error(`Erro HTTP: ${customError.status} - ${customError.error}`);
+    }
+
+    const data = await response.json();
+    sessionStorage.setItem('db_usuario', JSON.stringify(data));
+
+  if (loginPage) {
+    window.location.assign('./pages/tela-inicial/index.html');
+  }
+  
+    return data;
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+    throw error; // Propaga o erro para quem chamou a função
+  }
+}
