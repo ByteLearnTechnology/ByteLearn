@@ -48,6 +48,7 @@ async function logar(loginPage) {
 
     if (!response.ok) {
       const customError = await response.json()
+      alert('Usuário ou/e senha incorretos')
       throw new Error(`Erro HTTP: ${customError.status} - ${customError.error}`);
     }
 

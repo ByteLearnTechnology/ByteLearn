@@ -15,7 +15,7 @@ let copyItens
 let id
 loadStatus()
 loadPlanos()
-loadStudantsBD()
+loadStudentsBD()
 const getItensBack = () => JSON.parse(localStorage.getItem('dbBackend')) ?? []
 
 function voltar() {
@@ -60,10 +60,12 @@ function editItem(index) {
   openModal(true, index)
 }
 
-function deleteItem(index) {
-  itens.splice(index, 1)
-  setItensBD()
-  loadItens()
+function deleteItem(id) {
+  const confirmDelete = window.confirm('Realmente deseja apagar este dado?')
+  if (confirmDelete) {   
+    deleteStudent(id)
+    loadStudentsBD() 
+  }
 }
 
 function insertItem(item, index) {
@@ -80,7 +82,7 @@ function insertItem(item, index) {
       <button onclick="editItem(${index})"><i class='bx bx-edit' ></i></button>
     </td>
     <td class="acao">
-      <button onclick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
+      <button onclick="deleteItem(${item.id})"><i class='bx bx-trash'></i></button>
     </td>
   `
   tbody.appendChild(tr)
@@ -120,8 +122,6 @@ btnSalvar.onclick = e => {
       'data': sData.value
     })
   }
-
-  setItensBD()
 
   modal.classList.remove('active')
   loadItens()
@@ -187,10 +187,16 @@ function searchData() {
   }
 }
 
-const getItensBD = () => JSON.parse(localStorage.getItem('dbfunc')) ?? []
-const setItensBD = () => localStorage.setItem('dbfunc', JSON.stringify(itens))
+async function deleteStudent(id) {
+  const response = await fetch(`https://back-gymapi.onrender.com/api/enrolled/{id}?id=${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': '*/*',
+    },
+  });
+}
 
-async function loadStudantsBD() {
+async function loadStudentsBD() {
   await fetch('https://back-gymapi.onrender.com/api/enrolled', {
     headers: {
       'Accept': '*/*',
