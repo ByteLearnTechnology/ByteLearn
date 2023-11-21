@@ -312,7 +312,7 @@ async function insertStudent(student) {
 async function updateStudent(student) {
   const { name, phone, cpf, email, plan_id, status_id, finance_id, date, dueDate } = student
 
-  // updateFinance(date, dueDate, plan_id) é pra funcionar
+  updateFinance(date, dueDate, plan_id)
 
   const studentJson = JSON.stringify({
     name,
