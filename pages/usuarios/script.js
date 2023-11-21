@@ -9,13 +9,20 @@ const btnSalvar = document.querySelector('#btnSalvar')
 const btnFechar = document.querySelector('.btn-close-modal')
 const sStatus = document.querySelector('#m-status')
 const sData = document.querySelector('#m-data')
+const vData = document.querySelector('#m-data-vencimento')
 
 let itens
 let copyItens
 let id
-loadStatus()
-loadPlanos()
-loadStudentsBD()
+let statusPayment
+
+async function loadBackend() {
+  await loadStatus()
+  await loadPlanos()
+  await loadStudentsBD()
+}
+
+loadBackend()
 const getItensBack = () => JSON.parse(localStorage.getItem('dbBackend')) ?? []
 
 function voltar() {
@@ -40,9 +47,10 @@ function openModal(edit = false, index = 0) {
     sTelefone.value = itens[index].phone
     sCPF.value = itens[index].cpf
     sData.value = formatData(itens[index].finance.payday, '-')
+    vData.value = formatData(itens[index].finance.dueDate, '-')
     sEmail.value = itens[index].email
     id = index
-    sPlano.value = itens[index].plan.id
+    sPlano.value = itens[index].finance.plan.id
     sStatus.value = itens[index].status.id
   } else {
     sNome.value = ''
@@ -62,9 +70,9 @@ function editItem(index) {
 
 function deleteItem(id) {
   const confirmDelete = window.confirm('Realmente deseja apagar este dado?')
-  if (confirmDelete) {   
+  if (confirmDelete) {
     deleteStudent(id)
-    loadStudentsBD() 
+    loadStudentsBD()
   }
 }
 
@@ -76,7 +84,7 @@ function insertItem(item, index) {
     <td>${item.cpf}</td>
     <td>${item.finance.payday}</td>
     <td>${item.email}</td>
-    <td>${item.plan.description}</td>
+    <td>${item.finance.plan.description}</td>
     <td>${item.status.description}</td>
     <td class="acao">
       <button onclick="editItem(${index})"><i class='bx bx-edit' ></i></button>
@@ -104,23 +112,31 @@ btnSalvar.onclick = e => {
 
   e.preventDefault();
   if (id !== undefined) {
-    itens[id].nome = sNome.value
-    itens[id].telefone = sTelefone.value
-    itens[id].cpf = sCPF.value
-    itens[id].email = sEmail.value
-    itens[id].plano = sPlano.value
-    itens[id].status = sStatus.value
-    itens[id].data = sData.value
+    const student = {
+      id: itens[id].id,
+      name: sNome.value,
+      phone: sTelefone.value,
+      cpf: sCPF.value,
+      email: sEmail.value,
+      plan_id: sPlano.value,
+      status_id: sStatus.value,
+      finance_id: itens[id].finance.id,
+      date: sData.value,
+      dueDate: vData.value
+    }
+    updateStudent(student)
   } else {
-    itens.push({
-      'nome': sNome.value,
-      'telefone': sTelefone.value,
-      'cpf': sCPF.value,
-      'email': sEmail.value,
-      'plano': sPlano.value,
-      'status': sStatus.value,
-      'data': sData.value
-    })
+    const student = {
+      name: sNome.value,
+      phone: sTelefone.value,
+      cpf: sCPF.value,
+      email: sEmail.value,
+      plan_id: sPlano.value,
+      status_id: sStatus.value,
+      date: sData.value,
+      dueDate: vData.value
+    }
+    insertStudent(student)
   }
 
   modal.classList.remove('active')
@@ -129,7 +145,26 @@ btnSalvar.onclick = e => {
 }
 
 function ordenar(ascendente, coluna) {
-  copyItens.sort((a, b) => (a[coluna] > b[coluna]) ? ascendente.a : ((b[coluna] > a[coluna]) ? ascendente.b : 0));
+  if (coluna === 'plan') {
+    copyItens.sort((a, b) => (a.finance.plan.description
+      > b.finance.plan.description
+    ) ? ascendente.a : ((b.finance.plan.description
+      > a.finance.plan.description
+    ) ? ascendente.b : 0))
+  } else if(coluna === 'date'){
+    copyItens.sort((a, b) => (a.finance.payday
+      > b.finance.payday
+    ) ? ascendente.a : ((b.finance.payday
+      > a.finance.payday
+    ) ? ascendente.b : 0))
+  } else if(coluna === 'status'){
+    copyItens.sort((a, b) => (a.status.description
+      > b.status.description
+    ) ? ascendente.a : ((b.status.description
+      > a.status.description
+    ) ? ascendente.b : 0))
+  } else
+    copyItens.sort((a, b) => (a[coluna] > b[coluna]) ? ascendente.a : ((b[coluna] > a[coluna]) ? ascendente.b : 0));
 }
 
 let ordem = { a: -1, b: 1 }
@@ -141,7 +176,6 @@ function loadItens(tituloColuna) {
 
   copyItens.map(item => { item.finance.payday = formatData(item.finance.payday, '/'); return item })
   ordenar(ordem, tituloColuna)
-  console.log(copyItens);
   tbody.innerHTML = ''
   copyItens.forEach((item, index) => {
     insertItem(item, index)
@@ -196,6 +230,22 @@ async function deleteStudent(id) {
   });
 }
 
+function tratmentDate(data) {
+  const dateJS = (date) => new Date(date)
+  return JSON.stringify(data.map(student => {
+    if(student.status.id === 1){
+      if (dateJS(student.finance.dueDate) > dateJS()) {
+        student.status.description = statusPayment[2].description
+        student.status.id = statusPayment[2].id
+      } else {
+        student.status.description = statusPayment[0].description
+        student.status.id = statusPayment[0].id
+      }
+    }
+    return student
+  }))
+}
+
 async function loadStudentsBD() {
   await fetch('https://back-gymapi.onrender.com/api/enrolled', {
     headers: {
@@ -205,7 +255,7 @@ async function loadStudentsBD() {
   }).then(data => data.json())
     .then(
       data => {
-        localStorage.setItem('dbBackend', JSON.stringify(data))
+        localStorage.setItem('dbBackend', tratmentDate(data))
       }
     )
   loadItens()
@@ -218,7 +268,7 @@ async function loadStatus() {
       'Content-Type': 'application/json'
     },
   }).then(data => data.json())
-
+  statusPayment = response
   sStatus.innerHTML = `
 <option style="display: none;" selected disabled value="">Selecione o status</option>
 ${response.map(data => `<option value="${data.id}">${data.description}</option>`)}
@@ -237,4 +287,152 @@ async function loadPlanos() {
   <option style="display: none;" selected disabled value="">Selecione um plano</option>
 ${response.map(data => `<option value="${data.id}">${data.description}</option>`)}
 `
+}
+
+async function insertStudent(student) {
+  const createFinanceResponse = await createFinance(student.date, student.dueDate, student.plan_id)
+
+  const studentJson = JSON.stringify({
+    name: student.name,
+    phone: student.phone,
+    cpf: student.cpf,
+    email: student.email,
+    status_id: student.status_id,
+    finance_id: createFinanceResponse.id
+  })
+
+  try {
+    const createStudent = await fetch('https://back-gymapi.onrender.com/api/enrolled', {
+      method: 'POST',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      },
+      body: studentJson,
+    });
+    if (!createStudent.ok) {
+      const customError = await response.json()
+      alert('Erro, se persistir contate os desenvolvedores')
+      throw new Error(`Erro HTTP: ${customError.status} - ${customError.error}`);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+    throw error; // Propaga o erro para quem chamou a função
+  }
+
+  loadStudentsBD()
+}
+
+async function updateStudent(student) {
+  const { name, phone, cpf, email, plan_id, status_id, finance_id, date, dueDate } = student
+
+  // updateFinance(date, dueDate, plan_id) é pra funcionar
+
+  const studentJson = JSON.stringify({
+    name,
+    phone,
+    cpf,
+    email,
+    status_id,
+    finance_id
+  })
+
+  const url = `https://back-gymapi.onrender.com/api/enrolled/${itens[id].id}`
+  try {
+    const updateStudent = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      },
+      body: studentJson,
+    });
+    if (!updateStudent.ok) {
+      const customError = await response.json()
+      alert('Erro, se persistir contate os desenvolvedores')
+      throw new Error(`Erro HTTP: ${customError.status} - ${customError.error}`);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+    throw error; // Propaga o erro para quem chamou a função
+  }
+  loadStudentsBD()
+}
+
+
+async function updateFinance(date, dueDate, plan_id) {
+  const financeJson = JSON.stringify({
+    payday: formatarDataHora(date),
+    dueDate: formatarDataHora(dueDate),
+    plan_id: Number(plan_id),
+    planMonths: 1
+  })
+
+  const url = `https://back-gymapi.onrender.com/api/finance/${itens[id].finance.id}`
+
+  try {
+    const updateFincance = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      },
+      body: financeJson,
+    });
+
+    if (!updateFincance.ok) {
+      const customError = await updateFincance.json()
+      alert('Erro, se persistir contate os desenvolvedores')
+      throw new Error(`Erro HTTP: ${customError.status} - ${customError.error}`);
+    }
+
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+    throw error; // Propaga o erro para quem chamou a função
+  }
+}
+
+async function createFinance(date, dueDate, plan) {
+  const financeJson = JSON.stringify({
+    payday: formatarDataHora(date),
+    dueDate: formatarDataHora(dueDate),
+    plan_id: plan,
+    planMonths: 1
+  })
+  
+  try {
+    const createFinance = await fetch('https://back-gymapi.onrender.com/api/finance', {
+      method: 'POST',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      },
+      body: financeJson,
+    });
+    if (!createFinance.ok) {
+      const customError = await createFinance.json()
+      alert('Erro, se persistir contate os desenvolvedores')
+      throw new Error(`Erro HTTP: ${customError.status} - ${customError.error}`);
+    }
+    return await createFinance.json();
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+    throw error; // Propaga o erro para quem chamou a função
+  }
+}
+
+function formatarDataHora(date) {
+  const dataAtual = new Date(date);
+
+  const ano = dataAtual.getFullYear();
+  const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+  const dia = String(Number(dataAtual.getDate()) + 1).padStart(2, '0');
+
+  const hora = String(dataAtual.getHours()).padStart(2, '0');
+  const minuto = String(dataAtual.getMinutes()).padStart(2, '0');
+  const segundo = String(dataAtual.getSeconds()).padStart(2, '0');
+  const milissegundo = String(dataAtual.getMilliseconds()).padStart(3, '0');
+
+  const dataHoraFormatada = `${ano}-${mes}-${dia}T${hora}:${minuto}:${segundo}.${milissegundo}Z`;
+  return dataHoraFormatada
 }
