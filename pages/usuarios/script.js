@@ -183,20 +183,6 @@ function loadItens(tituloColuna) {
 
 }
 
-function formatData(dateString, separator) {
-  const parsedDate = new Date(dateString);
-
-  if (isNaN(parsedDate.getTime())) {
-    console.error('Erro: Data inválida.');
-    return null;
-  }
-
-  let formattedDateString = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parsedDate);
-  formattedDateString = separator === '/' ? formattedDateString : formattedDateString.split('/').reverse().join('-')
-  return formattedDateString
-}
-
-
 function searchData() {
   // Pega o valor do campo de busca
   var searchText = document.getElementById("searchInput").value.toLowerCase();
@@ -359,7 +345,6 @@ async function updateStudent(student) {
   loadStudentsBD()
 }
 
-
 async function updateFinance(date, dueDate, plan_id) {
   const financeJson = JSON.stringify({
     payday: formatarDataHora(date),
@@ -399,7 +384,7 @@ async function createFinance(date, dueDate, plan) {
     plan_id: plan,
     planMonths: 1
   })
-  
+
   try {
     const createFinance = await fetch('https://back-gymapi.onrender.com/api/finance', {
       method: 'POST',
@@ -435,4 +420,17 @@ function formatarDataHora(date) {
 
   const dataHoraFormatada = `${ano}-${mes}-${dia}T${hora}:${minuto}:${segundo}.${milissegundo}Z`;
   return dataHoraFormatada
+}
+
+function formatData(dateString, separator) {
+  const parsedDate = new Date(dateString);
+
+  if (isNaN(parsedDate.getTime())) {
+    console.error('Erro: Data inválida.');
+    return null;
+  }
+
+  let formattedDateString = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(parsedDate);
+  formattedDateString = separator === '/' ? formattedDateString : formattedDateString.split('/').reverse().join('-')
+  return formattedDateString
 }
